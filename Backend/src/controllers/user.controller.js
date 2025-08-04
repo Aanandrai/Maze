@@ -89,8 +89,13 @@ const loginUser =asyncHandler( async(req,res)=>{
 
     user.password=undefined
 
+    // expiresIn="1h"
+     const options={httpOnly:true , secure:true , sameSite: "Strict"}
 
-    res.status(200).cookie(accessToken).json(new ApiResponse(200,"User login success", user))
+
+    res.status(200)
+    .cookie("accessToken",accessToken, options)
+    .json(new ApiResponse(200,"User login success", user))
 
 
 })
@@ -98,4 +103,26 @@ const loginUser =asyncHandler( async(req,res)=>{
 
 
 
-export {registerUser , loginUser}
+
+// Controller for Getting User Profile 
+const getUserProfile=asyncHandler(async(req , res )=>{
+
+    res.status(200).json(new ApiResponse(200,"Getting User profile successfull",req.user))
+})
+
+
+
+
+
+// Contoller for logout User
+const logoutUser= asyncHandler(async(req,res)=>{
+    const options={httpOnly:true , secure:true , sameSite: "Strict"}
+    
+    res.status(200).clearCookie("accessToken",options).json(new ApiResponse(200,"User logout success"),{})
+
+})
+
+
+
+
+export {registerUser , loginUser,getUserProfile,logoutUser}
