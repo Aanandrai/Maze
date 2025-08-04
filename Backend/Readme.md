@@ -9,6 +9,7 @@ This is the backend API for the Maze application. It is built with Node.js, Expr
 - [Database Structure](#database-structure)
 - [API Endpoints](#api-endpoints)
   - [Register User](#register-user)
+- [Input Validation](#input-validation)
 - [Error Handling](#error-handling)
 - [Sample Requests & Responses](#sample-requests--responses)
 - [Status Codes](#status-codes)
@@ -91,7 +92,7 @@ The backend uses a PostgreSQL database. The main table is `users`:
 - `fullname.firstname` (string, required, min 3 chars)
 - `fullname.lastname` (string, optional, min 3 chars if provided)
 - `email` (string, required, must be unique)
-- `password` (string, required)
+- `password` (string, required, min 5 chars)
 
 #### Success Response
 
@@ -114,12 +115,12 @@ The backend uses a PostgreSQL database. The main table is `users`:
 #### Error Responses
 
 - **Status:** `400 Bad Request`
-  - Missing required fields.
+  - Missing required fields or validation fails.
   ```json
   {
     "statusCode": 400,
     "success": false,
-    "message": "Name ,email or password can not be empty"
+    "message": "Input data Validation fails"
   }
   ```
 
@@ -142,6 +143,26 @@ The backend uses a PostgreSQL database. The main table is `users`:
     "message": "something went wrong"
   }
   ```
+
+---
+
+## Input Validation
+
+Input validation is handled using [Joi](https://joi.dev/).  
+All incoming requests to `/api/v1/user/register` are validated with the following schema:
+
+```js
+const userSchema = Joi.object({
+  fullname: Joi.object({
+    firstname: Joi.string().min(3).required(),
+    lastname: Joi.string().min(3).optional(),
+  }).required(),
+  email: Joi.string().email().required(),
+  password: Joi.string().min(5).required(),
+});
+```
+
+If validation fails, a `400 Bad Request` is returned with a descriptive message.
 
 ---
 
@@ -215,6 +236,8 @@ Backend/
       ApiError.js
       ApiResponse.js
       asyncHandler.js
+    middlewares/
+      inputValidater.js
   package.json
   .gitignore
 ```
