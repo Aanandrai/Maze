@@ -18,7 +18,9 @@ app.use(cookieParser())
 
 
 import createUserTable from "./db/createUserTable.js"
+import createCaptainTable from "./db/createCaptainTable.js"
 createUserTable()
+createCaptainTable()
 
 
 
