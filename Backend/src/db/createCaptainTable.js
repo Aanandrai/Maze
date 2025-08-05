@@ -6,14 +6,17 @@ const createCaptainTable= async()=>{
     id SERIAL PRIMARY KEY,
     firstname VARCHAR(255) NOT NULL CHECK(char_length(firstname) >=3),
     lastname VARCHAR(255) CHECK(char_length(lastname)>3),
-
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
 
     socketId VARCHAR(255) ,
     status TEXT NOT NULL DEFAULT 'inactive' CHECK (status IN ('active', 'inactive', 'banned')),
-    location geography(Point, 4326)
-    `
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION
+    
+    )`
+
+    // location geography(Point, 4326)    this powerfull tool to calculate the location related 
 
     const queryTextCreateVehicleType=`
     CREATE TABLE IF NOT EXISTS vehicle_type (
@@ -32,6 +35,7 @@ const createCaptainTable= async()=>{
     )
     `
     try{
+    //     await pool.query(`CREATE EXTENSION IF NOT EXISTS postgis`);
         await pool.query(queryText)
         await pool.query(queryTextCreateVehicleType)
         await pool.query(queryVehicle)
@@ -41,4 +45,4 @@ const createCaptainTable= async()=>{
     }
 }
 
-export {createCaptainTable}
+export default createCaptainTable
