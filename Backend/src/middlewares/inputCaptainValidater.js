@@ -14,7 +14,7 @@ const captainSchema=Joi.object({
     status:Joi.string().valid('active','inactive','banned').optional(),
 
     carInfo:Joi.object({
-        color:Joi.string().min(4).required(),
+        color:Joi.string().min(3).required(),
         plate:Joi.string().min(4).required(),
         capacity:Joi.number().min(1).required(),
         vehicle_type :Joi.string().valid('car','bike','auto').required()

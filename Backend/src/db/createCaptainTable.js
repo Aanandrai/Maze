@@ -5,7 +5,7 @@ const createCaptainTable= async()=>{
     CREATE TABLE IF NOT EXISTS captain (
     id SERIAL PRIMARY KEY,
     firstname VARCHAR(255) NOT NULL CHECK(char_length(firstname) >=3),
-    lastname VARCHAR(255) CHECK(char_length(lastname)>3),
+    lastname VARCHAR(255) CHECK(lastname IS NULL OR char_length(lastname)>=3),
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
 
@@ -19,19 +19,21 @@ const createCaptainTable= async()=>{
     // location geography(Point, 4326)    this powerfull tool to calculate the location related 
 
     const queryTextCreateVehicleType=`
-    CREATE TABLE IF NOT EXISTS vehicle_type (
-    id SERIAL PRIMARY KEY,
-    type VARCHAR(50) NOT NULL CHECK(type in ('car','bike','auto'))
-    )`
+    DO $$
+    BEGIN
+    IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'vehicle_enum') THEN
+        CREATE TYPE vehicle_enum AS ENUM ('car', 'bike', 'auto');
+    END IF;
+    END$$;`
 
     const queryVehicle=`
     CREATE TABLE IF NOT EXISTS vehicle (
     id SERIAL PRIMARY KEY,
-    captain_id INT REFERENCES captain(id),
-    color VARCHAR(255) NOT NULL CHECK(char_length(color)>3),
+    captain_id INT REFERENCES captain(id) NOT NULL,
+    color VARCHAR(255) NOT NULL CHECK(char_length(color)>=3),
     plate VARCHAR(255) NOT NULL CHECK(char_length(plate)>3),
     capacity INT NOT NULL CHECK(capacity>=1),
-    vehicle_type_id INT REFERENCES vehicle_type(id)
+    vehicle_type vehicle_enum NOT NULL
     )
     `
     try{
