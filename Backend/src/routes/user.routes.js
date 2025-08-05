@@ -1,7 +1,7 @@
 import express from "express"
 import { getUserProfile, loginUser, logoutUser, registerUser } from "../controllers/user.controller.js"
-import { validateLogin, validateUser } from "../middlewares/inputValidater.js"
-import { isLoggedIn } from "../middlewares/auth.middleware.js"
+import { validateUserLogin, validateUser } from "../middlewares/inputUserValidater.js"
+import { isUserLoggedIn } from "../middlewares/auth.middleware.js"
 const router=express.Router()
 
 router.route("/register")
@@ -9,15 +9,15 @@ router.route("/register")
 
 
 router.route("/login")
-    .get(validateLogin ,loginUser)
+    .get(validateUserLogin ,loginUser)
 
 
 router.route("/getProfile")
-    .get(isLoggedIn , getUserProfile)
+    .get(isUserLoggedIn , getUserProfile)
 
 
 router .route("/logout")
-    .get(isLoggedIn, logoutUser)
+    .get(isUserLoggedIn, logoutUser)
 
 
 export default router

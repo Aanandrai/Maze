@@ -22,15 +22,15 @@ const validateUser=asyncHandler((req,res,next)=>{
 
 const loginSchema=Joi.object({
     email:Joi.string().email().required(),
-    password:Joi.string().min(4).required()
+    password:Joi.string().min(5).required()
 })
 
 
-const validateLogin=asyncHandler((req,res,next)=>{
+const validateUserLogin=asyncHandler((req,res,next)=>{
     const {error}=loginSchema.validate(req.body)
     if(error) throw new ApiError(400 ,"Input data Validation fails")
     next()
 })
 
 
-export{validateUser,validateLogin}
+export{validateUser,validateUserLogin}

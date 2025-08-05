@@ -5,7 +5,7 @@ import { ApiError } from "../utills/ApiError.js";
 
 
 
-const isLoggedIn=asyncHandler(async(req , res , next)=>{
+const isUserLoggedIn=asyncHandler(async(req , res , next)=>{
 
     const token=req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer","")
 
@@ -36,4 +36,4 @@ const isLoggedIn=asyncHandler(async(req , res , next)=>{
 
 })
 
-export {isLoggedIn}
+export {isUserLoggedIn}
