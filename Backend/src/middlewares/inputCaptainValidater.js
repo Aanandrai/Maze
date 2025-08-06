@@ -4,6 +4,8 @@ import { ApiError } from "../utills/ApiError.js"
 import { asyncHandler } from "../utills/asyncHandler.js"
 
 
+
+// Captian register validation 
 const captainSchema=Joi.object({
     fullname:Joi.object({
         firstname:Joi.string().min(3).required(),
@@ -22,7 +24,6 @@ const captainSchema=Joi.object({
     
 })
 
-
 const validateCaptain=asyncHandler(async(req, _ , next)=>{
     const {error}=captainSchema.validate(req.body)
 
@@ -32,4 +33,20 @@ const validateCaptain=asyncHandler(async(req, _ , next)=>{
 
 
 
-export {validateCaptain}
+
+// Captain Login validation 
+const loginSchema=Joi.object({
+    email:Joi.string().email().required(),
+    password:Joi.string().min(5).required()
+})
+
+
+const validateCaptainLogin=asyncHandler((req,_,next)=>{
+    const {error}=loginSchema.validate(req.body)
+    if(error) throw new ApiError(400 ,"Input data Validation fails")
+    next()
+})
+
+
+
+export {validateCaptain ,validateCaptainLogin}

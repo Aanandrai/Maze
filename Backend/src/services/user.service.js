@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt"
 import pool from "../db/dbConnect.js"
 
+
+// Service to find User exist with email or not
 const findUserByEmailExistService=async(email)=>{
 
     const result=await pool.query(`SELECT id FROM users WHERE email=$1`,[email])
@@ -8,7 +10,7 @@ const findUserByEmailExistService=async(email)=>{
 
 }
 
-
+// Service to find User with given email 
 const findUserByEmailService=async(email)=>{
 
     const result=await pool.query(`SELECT * FROM users WHERE email=$1`,[email])
@@ -16,7 +18,7 @@ const findUserByEmailService=async(email)=>{
 
 }
 
-
+// Service to Create captain 
 const createUserService =async(fullname , email, password)=>{
 
     const firstname=fullname.firstname

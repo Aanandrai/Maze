@@ -6,7 +6,7 @@ import JWT from "jsonwebtoken"
 import bcrypt from "bcrypt"
 
 
-
+// Access Token Generator 
 const generateAccessToken=(user)=>{
 
     const expiresIn = '1h'
@@ -14,7 +14,8 @@ const generateAccessToken=(user)=>{
     const accessToken=JWT.sign(
         {
             id:user.id,
-            email:user.email
+            email:user.email,
+            role:"User"
 
         },
         process.env.ACCESS_TOKEN_SECRET_KEY,
@@ -24,10 +25,6 @@ const generateAccessToken=(user)=>{
     return {accessToken}
 
 }
-
-
-
-
 
 
 

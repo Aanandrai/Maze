@@ -9,9 +9,18 @@ const findCaptainByEmailExistService=async(email)=>{
 }
 
 
+const findCaptainByEmailService=async(email)=>{
+
+    const result=await pool.query(`SELECT * FROM captain WHERE email=$1`,[email])
+    return result?.rows[0]
+
+}
+
+
+
 const createNewCaptainService=async(fullname, email,password, carInfo)=>{
-    console.log(fullname.firstname,fullname.lastname)
-    const result1=await pool.query(`INSERT INTO captain(firstname,lastname,email,password) VALUES($1,$2,$3,$4) returning *`,[fullname.firstname, fullname.lastname,email,password])
+    const newPassword =await bcrypt.hash(password,10)
+    const result1=await pool.query(`INSERT INTO captain(firstname,lastname,email,password) VALUES($1,$2,$3,$4) returning *`,[fullname.firstname, fullname.lastname,email,newPassword])
 
 
     const userinfo=result1.rows[0]
@@ -25,4 +34,4 @@ const createNewCaptainService=async(fullname, email,password, carInfo)=>{
 }
 
 
-export {findCaptainByEmailExistService,createNewCaptainService}
+export {findCaptainByEmailExistService, findCaptainByEmailService , createNewCaptainService}

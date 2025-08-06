@@ -2,7 +2,7 @@ import Joi from "joi"
 import { ApiError } from "../utills/ApiError.js"
 import { asyncHandler } from "../utills/asyncHandler.js"
 
-
+// User registration validation 
 const userSchema=Joi.object({
     fullname: Joi.object({
         firstname: Joi.string().min(3).required(),
@@ -12,21 +12,21 @@ const userSchema=Joi.object({
     password: Joi.string().min(5).required(),
 })
 
-const validateUser=asyncHandler((req,res,next)=>{
+const validateUser=asyncHandler((req,_,next)=>{
     const {error}=userSchema.validate(req.body)
     if(error) throw new ApiError(400,error.details[0].message ||"Input data Validation fails")
     next()
 })
 
 
-
+// User login vlaidation
 const loginSchema=Joi.object({
     email:Joi.string().email().required(),
     password:Joi.string().min(5).required()
 })
 
 
-const validateUserLogin=asyncHandler((req,res,next)=>{
+const validateUserLogin=asyncHandler((req,_,next)=>{
     const {error}=loginSchema.validate(req.body)
     if(error) throw new ApiError(400 ,"Input data Validation fails")
     next()
